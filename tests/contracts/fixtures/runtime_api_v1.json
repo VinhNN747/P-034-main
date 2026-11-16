@@ -1,0 +1,43 @@
+{
+  "request": {
+    "prompt": "Summarize this text.",
+    "context": {"document": "A short document."},
+    "constraints": {
+      "quality_priority": "cost_first",
+      "max_output_tokens": 400,
+      "output_format": "markdown"
+    },
+    "metadata": {"client_reference": "contract-fixture"}
+  },
+  "response": {
+    "request_id": "93c04ad8-9e79-4bd6-855a-69f354aa7dbe",
+    "application_id": "f6d4edb7-9e78-4bd4-bfa4-22b2eb3b1346",
+    "status": "completed",
+    "execution_mode": "offline",
+    "output": "A short summary.",
+    "models_used": ["7be5e273-9c74-45ca-ae29-48b5bf3226b5"],
+    "providers_used": ["local"],
+    "usage": {
+      "execution": {"input_tokens": 12, "output_tokens": 5, "total_tokens": 17},
+      "pipeline": {"input_tokens": 12, "output_tokens": 5, "total_tokens": 17},
+      "complete": true
+    },
+    "cost": {"currency": "USD", "estimated_cost": 0.0001, "estimated": true},
+    "latency_ms": 42.3,
+    "fallback_used": false,
+    "config_version": 3,
+    "started_at": "2026-10-01T03:00:00Z",
+    "finished_at": "2026-10-01T03:00:00.042300Z",
+    "warnings": [],
+    "error": null
+  },
+  "error": {
+    "error": {
+      "code": "REQUEST_IN_PROGRESS",
+      "message": "Request is still running.",
+      "retryable": true,
+      "details": {"request_id": "93c04ad8-9e79-4bd6-855a-69f354aa7dbe"}
+    },
+    "request_id": "93c04ad8-9e79-4bd6-855a-69f354aa7dbe"
+  }
+}

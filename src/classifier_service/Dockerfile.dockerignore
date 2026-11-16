@@ -1,0 +1,15 @@
+# Build context is the repository root; exclude local credentials and generated files.
+.git
+.env
+.env.*
+.venv*
+node_modules
+src/frontend
+data
+tmp
+tests
+docs
+eval
+presentation
+__pycache__
+*.pyc

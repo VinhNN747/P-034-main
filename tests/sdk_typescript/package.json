@@ -1,0 +1,8 @@
+{
+  "name": "gateway-openai-sdk-contracts",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test contract.test.mjs" },
+  "dependencies": { "openai": "7.30.1" }
+}

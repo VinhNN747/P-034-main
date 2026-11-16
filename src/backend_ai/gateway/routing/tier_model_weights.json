@@ -1,0 +1,101 @@
+{
+ "version": "tier-lr-20261008",
+ "features": [
+  "reasoning",
+  "domain",
+  "ambiguity",
+  "risk",
+  "output",
+  "knowledge_rarity",
+  "live_data",
+  "log_input_chars",
+  "task:coding",
+  "task:reasoning",
+  "task:research",
+  "task:content_generation",
+  "task:general",
+  "task:translation",
+  "task:classification",
+  "task:customer_support",
+  "task:summarization",
+  "task:data_extraction"
+ ],
+ "classes": [
+  "small_fast",
+  "mid",
+  "large_reasoning"
+ ],
+ "coef": [
+  [
+   -0.428649,
+   -1.153032,
+   -0.093217,
+   -0.588395,
+   -0.620866,
+   0.108781,
+   0.590157,
+   -0.089173,
+   -0.022108,
+   0.108542,
+   -0.233867,
+   0.245534,
+   -0.356097,
+   0.08204,
+   0.145458,
+   0.072814,
+   0.0,
+   -0.040098
+  ],
+  [
+   0.550046,
+   0.257706,
+   -0.604681,
+   -0.554685,
+   0.414961,
+   0.03305,
+   -0.388323,
+   -0.520166,
+   0.134058,
+   0.581675,
+   -0.303049,
+   -0.35573,
+   -0.350077,
+   -0.081039,
+   0.186596,
+   -0.063473,
+   0.0,
+   0.24665
+  ],
+  [
+   -0.121397,
+   0.895326,
+   0.697897,
+   1.14308,
+   0.205905,
+   -0.141831,
+   -0.201834,
+   0.609339,
+   -0.111951,
+   -0.690218,
+   0.536916,
+   0.110197,
+   0.706174,
+   -0.001001,
+   -0.332055,
+   -0.009341,
+   0.0,
+   -0.206553
+  ]
+ ],
+ "intercept": [
+  5.063481,
+  3.398216,
+  -8.461697
+ ],
+ "trained_on": {
+  "set": "real tune only",
+  "rows": 100,
+  "tune_cv_accuracy": 0.72,
+  "locked_accuracy": 0.847
+ }
+}

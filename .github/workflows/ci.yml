@@ -1,0 +1,181 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r src/requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: tests/sdk_typescript/package-lock.json
+
+      - name: Install pinned TypeScript SDK
+        run: npm ci --prefix tests/sdk_typescript --ignore-scripts
+
+      - name: Lint with ruff
+        run: ruff check src/ tests/
+
+      - name: Run tests
+        run: pytest tests/ -v --tb=short --basetemp=/tmp/p034-ci-contracts
+        env:
+          APP_ENV: test
+          DATABASE_URL: 'sqlite+aiosqlite:///:memory:'
+          OPENAI_API_KEY: test-key
+
+  postgres-runtime:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gateway_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d gateway_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install backend dependencies
+        run: pip install -r src/requirements.txt
+
+      - name: Create Supabase role and RBAC stubs used by migrations
+        run: |
+          psql "$PG_URL" -v ON_ERROR_STOP=1 <<'SQL'
+          CREATE ROLE anon;
+          CREATE ROLE authenticated;
+          CREATE TABLE public.roles (
+            id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+            code text NOT NULL UNIQUE
+          );
+          CREATE TABLE public.permissions (
+            id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+            code text NOT NULL UNIQUE,
+            resource text NOT NULL,
+            action text NOT NULL,
+            description text NOT NULL
+          );
+          CREATE TABLE public.role_permissions (
+            id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+            role_id uuid NOT NULL REFERENCES public.roles(id),
+            permission_id uuid NOT NULL REFERENCES public.permissions(id),
+            UNIQUE (role_id, permission_id)
+          );
+          INSERT INTO public.roles (code)
+          VALUES ('admin'), ('platform_admin'), ('user'), ('ai_engineer');
+          SQL
+        env:
+          PG_URL: postgresql://postgres:postgres@localhost:5432/gateway_test
+
+      - name: Apply migrations to PostgreSQL
+        run: alembic -c src/alembic.ini upgrade head
+        env:
+          DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/gateway_test
+
+      - name: Test PostgreSQL runtime and billing concurrency
+        run: pytest tests/test_db/test_runtime_postgres_concurrency.py tests/test_db/test_files_postgres_concurrency.py -v --tb=short --basetemp=/tmp/p034-ci-postgres
+        env:
+          APP_ENV: test
+          DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/gateway_test
+          OPENAI_AUDIT_ISOLATED_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/gateway_test
+          OPENAI_API_KEY: test-key
+
+      - name: Rehearse new migrations on disposable database
+        run: |
+          alembic -c src/alembic.ini downgrade 20261007_merge_port_context
+          alembic -c src/alembic.ini upgrade head
+        env:
+          DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/gateway_test
+
+  openai-proxy:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gateway_load
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d gateway_load"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r src/requirements.txt
+      - run: docker pull nginx:stable-alpine
+      - name: Deterministic Nginx streaming and resource campaign
+        run: pytest tests/test_api/test_openai_proxy_campaign.py -q -s --basetemp=/tmp/p034-ci-proxy
+        env:
+          APP_ENV: test
+          DATABASE_URL: 'sqlite+aiosqlite:///:memory:'
+          OPENAI_AUDIT_PROXY: '1'
+          OPENAI_AUDIT_CONTRACT_PG_URL: postgresql+psycopg://postgres:postgres@localhost:5432/gateway_load
+          OPENAI_AUDIT_PROXY_REPORT: /tmp/openai-proxy.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: openai-proxy-evidence
+          path: /tmp/openai-proxy.json
+
+  openai-s3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r src/requirements.txt 'moto[server]==5.2.3'
+      - name: Required disposable S3 HTTP campaign
+        run: |
+          moto_server -H 127.0.0.1 -p 18003 >/tmp/moto.log 2>&1 &
+          fixture_pid=$!
+          trap 'kill "$fixture_pid"' EXIT
+          for attempt in $(seq 1 50); do
+            if curl --silent --fail http://127.0.0.1:18003 >/dev/null; then break; fi
+            sleep 0.1
+          done
+          pytest tests/test_gateway/test_s3_wire_campaign.py -q --basetemp=/tmp/p034-ci-s3
+        env:
+          APP_ENV: test
+          DATABASE_URL: 'sqlite+aiosqlite:///:memory:'
+          OPENAI_AUDIT_S3_EMULATOR_URL: http://127.0.0.1:18003

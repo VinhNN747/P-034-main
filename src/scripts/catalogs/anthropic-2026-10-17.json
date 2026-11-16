@@ -1,0 +1,163 @@
+{
+  "provider": {
+    "name": "anthropic",
+    "display_name": "Anthropic",
+    "kind": "anthropic",
+    "purpose": "target",
+    "status": "active",
+    "base_url": "https://api.anthropic.com",
+    "secret_env_var": "",
+    "owner_user_id": null
+  },
+  "capabilities": [
+    "text",
+    "chat",
+    "reasoning",
+    "structured_output",
+    "code_generation",
+    "classification",
+    "summarization",
+    "long_context",
+    "tool_use"
+  ],
+  "context_window": 1000000,
+  "max_output_tokens": 128000,
+  "pricing_version": "anthropic-docs-2026-10-17",
+  "common_features": {
+    "upstream_features": {
+      "chat_multi_turn": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/api/messages/create"},
+      "system_prompt": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/api/messages/create"},
+      "multilingual": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/models/overview"},
+      "code_generation": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/models/overview"},
+      "classification": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/models/overview"},
+      "summarization": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/models/overview"},
+      "streaming": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/build-with-claude/streaming"},
+      "image_input": {"support": "supported", "conditions": ["Image dimensions and request limits apply."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/vision"},
+      "pdf_input": {"support": "supported", "conditions": ["PDF size, page and token limits apply."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/pdf-support"},
+      "document_citations": {"support": "supported", "conditions": ["Citation blocks are returned when document citations are enabled."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/citations"},
+      "structured_output": {"support": "supported", "conditions": ["JSON Schema subset; unsupported schema constructs are rejected."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"},
+      "custom_function_tools": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"},
+      "strict_tool_inputs": {"support": "supported", "conditions": ["Tool schemas must be within the supported JSON Schema subset."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference"},
+      "parallel_tool_use": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"},
+      "adaptive_thinking": {"support": "supported", "conditions": ["Availability and effort behavior depend on model."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking"},
+      "prompt_caching_5m_1h": {"support": "supported", "conditions": ["Cache-control breakpoints and minimum token counts apply."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"},
+      "token_counting_api": {"support": "supported", "conditions": ["The count endpoint is an estimate and may not equal billed usage."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/token-counting"},
+      "message_batches": {"support": "supported", "conditions": ["Batch endpoint and billing are separate from synchronous Messages."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/message-batches"},
+      "web_search": {"support": "conditional", "conditions": ["Server tool availability depends on model, region and account."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool"},
+      "web_fetch": {"support": "conditional", "conditions": ["Server tool availability depends on model, region and account."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool"},
+      "code_execution": {"support": "conditional", "conditions": ["Server tool/model compatibility and separate execution limits apply."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool"},
+      "computer_use": {"support": "conditional", "conditions": ["Requires supported tool version and an external computer environment."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool"},
+      "browser_use": {"support": "conditional", "conditions": ["Requires supported tool version and an external browser environment."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference"},
+      "bash_editor_memory_tools": {"support": "conditional", "conditions": ["Tool availability depends on the exact tool and model version."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference"},
+      "tool_search_programmatic_calling": {"support": "conditional", "conditions": ["Specific beta/tool definitions and account access may be required."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference"},
+      "mcp_connectors_and_skills": {"support": "conditional", "conditions": ["Integration and feature availability depend on product surface and beta access."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference"},
+      "context_compaction": {"support": "conditional", "conditions": ["Compaction/context-editing support depends on the model and beta API version."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/compaction"},
+      "audio_input_output": {"support": "unsupported", "conditions": ["These model IDs do not advertise native audio input or output."], "source_url": "https://platform.claude.com/docs/en/models/overview"},
+      "video_input": {"support": "unsupported", "conditions": ["These model IDs do not advertise native video input."], "source_url": "https://platform.claude.com/docs/en/models/overview"},
+      "embeddings_rerank_image_generation": {"support": "unsupported", "conditions": ["These are chat model IDs, not embedding, reranking or image-generation endpoints."], "source_url": "https://platform.claude.com/docs/en/models/overview"}
+    },
+    "gateway_features": {
+      "chat_multi_turn": {"support": "supported", "conditions": ["Text and tool message history only in this release."], "source_url": "https://platform.claude.com/docs/en/api/messages/create"},
+      "streaming": {"support": "supported", "conditions": ["Thinking and signature blocks are never returned as user text."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/streaming"},
+      "structured_output": {"support": "conditional", "conditions": ["JSON Schema subset only; JSON object mode is rejected."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"},
+      "custom_function_tools": {"support": "supported", "conditions": ["The caller executes tools; tool IDs and results are preserved."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"},
+      "strict_tool_inputs": {"support": "conditional", "conditions": ["Schemas must be within the supported JSON Schema subset."], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference"},
+      "parallel_tool_use": {"support": "supported", "conditions": [], "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"},
+      "thinking": {"support": "supported", "conditions": ["Thinking remains internal; only visible text and usage are exposed."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking"},
+      "prompt_cache_control": {"support": "conditional", "conditions": ["Caller cache-control is not exposed; reported cache usage is still accounted for."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"},
+      "token_counting": {"support": "conditional", "conditions": ["Internal estimates only; unavailable counter uses conservative estimated pricing."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/token-counting"},
+      "native_server_tools_and_modalities": {"support": "unsupported", "conditions": ["No native image/PDF transport, server tools, batch, audio or video in this gateway release."], "source_url": "https://platform.claude.com/docs/en/build-with-claude/overview"}
+    }
+  },
+  "models": [
+    {
+      "name": "claude-haiku-5-5",
+      "display_name": "Claude Haiku 5.5",
+      "quality_tier": "simple",
+      "input_price_per_million": 0.1,
+      "output_price_per_million": 0.5,
+      "feature_overrides": {
+        "upstream_features": {"forced_tool_choice": {"support": "conditional", "conditions": ["Availability depends on the selected tool-choice mode."], "source_url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview"}},
+        "gateway_features": {"forced_tool_choice": {"support": "conditional", "conditions": ["Rejected unless the selected Haiku profile permits the requested forced mode."], "source_url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview"}}
+      },
+      "feature_metadata": {
+        "constraints": {"thinking_mode": "adaptive", "default_effort": "medium", "forced_tool_choice": "conditional", "custom_sampling": false, "prompt_caching": true, "token_counting": true},
+        "pricing": {"currency": "USD", "standard_input_per_million": 0.1, "standard_output_per_million": 0.5, "long_context_input_threshold": 100000, "long_context_threshold_operator": ">", "long_context_input_per_million": 0.5, "long_context_output_per_million": 2.5, "cache_write_5m_input_per_million": 0.125, "cache_write_1h_input_per_million": 0.2, "cache_read_input_per_million": 0.01, "batch_discount_fraction": 0.5},
+        "lifecycle": {"stage": "active", "reliable_knowledge_cutoff": "2026-06", "retirement_commitment": "2027-10-07"},
+        "latency_reference": {"source": "openrouter", "provider": "Anthropic", "service_tier": "standard", "source_metric": "latency_p50", "metric_interpretation": "ttft", "latency_ms": 1820, "throughput_tokens_per_second": 177, "percentile": 50, "reasoning_effort": "all", "locations": "all", "window": "1 week", "retrieved_on": "2026-10-17", "source_url": "https://openrouter.ai/anthropic/claude-haiku-5.5/", "verification": "external_reference"}
+      }
+    },
+    {
+      "name": "claude-sonnet-5-5",
+      "display_name": "Claude Sonnet 5.5",
+      "quality_tier": "mid",
+      "input_price_per_million": 2,
+      "output_price_per_million": 10,
+      "feature_overrides": {},
+      "feature_metadata": {
+        "constraints": {"thinking_mode": "adaptive", "default_effort": "high", "forced_tool_choice": "unsupported", "custom_sampling": false, "prompt_caching": true, "token_counting": true},
+        "pricing": {"currency": "USD", "standard_input_per_million": 2, "standard_output_per_million": 10, "cache_write_5m_input_per_million": 2.5, "cache_write_1h_input_per_million": 4, "cache_read_input_per_million": 0.1, "batch_discount_fraction": 0.5},
+        "lifecycle": {"stage": "active", "reliable_knowledge_cutoff": "2026-06", "retirement_commitment": "2027-09-28"},
+        "latency_reference": {"source": "openrouter", "provider": "Anthropic", "service_tier": "standard", "source_metric": "latency_p50", "metric_interpretation": "ttft", "latency_ms": 1350, "throughput_tokens_per_second": 96, "percentile": 50, "reasoning_effort": "all", "locations": "all", "window": "1 week", "retrieved_on": "2026-10-17", "source_url": "https://openrouter.ai/anthropic/claude-sonnet-5.5", "verification": "external_reference"}
+      }
+    },
+    {
+      "name": "claude-opus-5-5",
+      "display_name": "Claude Opus 5.5",
+      "quality_tier": "hard",
+      "input_price_per_million": 4,
+      "output_price_per_million": 20,
+      "feature_overrides": {},
+      "feature_metadata": {
+        "constraints": {"thinking_mode": "always_on", "default_effort": "medium", "forced_tool_choice": "unsupported", "custom_sampling": false, "prompt_caching": true, "token_counting": true},
+        "pricing": {"currency": "USD", "standard_input_per_million": 4, "standard_output_per_million": 20, "cache_write_5m_input_per_million": 5, "cache_write_1h_input_per_million": 8, "cache_read_input_per_million": 0.2, "batch_discount_fraction": 0.5},
+        "lifecycle": {"stage": "active", "reliable_knowledge_cutoff": "2026-06", "retirement_commitment": "2027-09-22"},
+        "latency_reference": {"source": "openrouter", "provider": "Anthropic", "service_tier": "standard", "source_metric": "latency_p50", "metric_interpretation": "ttft", "latency_ms": 3000, "throughput_tokens_per_second": 64, "percentile": 50, "reasoning_effort": "all", "locations": "all", "window": "1 week", "retrieved_on": "2026-10-17", "source_url": "https://openrouter.ai/anthropic/claude-opus-5.5", "verification": "external_reference"}
+      }
+    },
+    {
+      "name": "claude-fable-5-1",
+      "display_name": "Claude Fable 5.1",
+      "quality_tier": "hard",
+      "input_price_per_million": 10,
+      "output_price_per_million": 50,
+      "feature_overrides": {},
+      "feature_metadata": {
+        "constraints": {"thinking_mode": "always_on", "default_effort": "high", "forced_tool_choice": "unsupported", "custom_sampling": false, "prompt_caching": true, "token_counting": true},
+        "pricing": {"currency": "USD", "standard_input_per_million": 10, "standard_output_per_million": 50, "cache_write_5m_input_per_million": 12.5, "cache_write_1h_input_per_million": 20, "cache_read_input_per_million": 0.25, "batch_discount_fraction": 0.5},
+        "lifecycle": {"stage": "active", "reliable_knowledge_cutoff": "2026-06", "retirement_commitment": "2027-09-01"},
+        "latency_reference": {"source": "openrouter", "provider": "Anthropic", "service_tier": "standard", "source_metric": "latency_p50", "metric_interpretation": "ttft", "latency_ms": 3720, "throughput_tokens_per_second": 62, "percentile": 50, "reasoning_effort": "all", "locations": "all", "window": "1 week", "retrieved_on": "2026-10-17", "source_url": "https://openrouter.ai/anthropic/claude-fable-5.1", "verification": "external_reference"}
+      }
+    },
+    {
+      "name": "claude-sonnet-4-6",
+      "display_name": "Claude Sonnet 4.6",
+      "quality_tier": "mid",
+      "input_price_per_million": 3,
+      "output_price_per_million": 15,
+      "feature_overrides": {
+        "upstream_features": {"forced_tool_choice": {"support": "conditional", "conditions": ["Forced tool choice is supported for compatible thinking modes."], "source_url": "https://platform.claude.com/docs/en/models/sonnet-4-6/overview"}},
+        "gateway_features": {"forced_tool_choice": {"support": "conditional", "conditions": ["Rejected when the active thinking mode conflicts with forced tool choice."], "source_url": "https://platform.claude.com/docs/en/models/sonnet-4-6/overview"}}
+      },
+      "feature_metadata": {
+        "constraints": {"thinking_mode": "adaptive_legacy", "default_effort": "high", "forced_tool_choice": "conditional", "custom_sampling": false, "prompt_caching": true, "token_counting": true},
+        "pricing": {"currency": "USD", "standard_input_per_million": 3, "standard_output_per_million": 15, "cache_write_5m_input_per_million": 3.75, "cache_write_1h_input_per_million": 6, "cache_read_input_per_million": 0.3, "batch_discount_fraction": 0.5},
+        "lifecycle": {"stage": "legacy", "reliable_knowledge_cutoff": "2025-08", "retirement_commitment": "2027-02-17"},
+        "latency_reference": {"source": "openrouter", "provider": "Anthropic", "service_tier": "standard", "source_metric": "latency_p50", "metric_interpretation": "ttft", "latency_ms": 910, "throughput_tokens_per_second": 39, "percentile": 50, "reasoning_effort": "all", "locations": "all", "window": "1 week", "retrieved_on": "2026-10-17", "source_url": "https://openrouter.ai/anthropic/claude-sonnet-4.6", "verification": "external_reference"}
+      }
+    }
+  ],
+  "provenance": {
+    "checked_on": "2026-10-17",
+    "verification": "documentation_only",
+    "sources": [
+      "https://platform.claude.com/docs/en/models/overview",
+      "https://platform.claude.com/docs/en/about-claude/pricing",
+      "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "https://platform.claude.com/docs/en/api/messages/create",
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference",
+      "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance/"
+    ]
+  }
+}

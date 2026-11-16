@@ -1,0 +1,22 @@
+# What `gcloud builds submit . --ignore-file src/classifier_service/.gcloudignore` uploads: the
+# Dockerfile and files it copies (gitignore syntax: a directory must be re-included
+# before files inside it).
+/*
+!/src/
+/src/*
+!/src/classifier_service/
+/src/classifier_service/*
+!/src/classifier_service/Dockerfile
+!/src/classifier_service/cloudbuild.yaml
+!/src/classifier_service/app.py
+!/src/classifier_service/requirements.txt
+!/src/scripts/
+/src/scripts/*
+!/src/scripts/fetch_task_classifier.py
+!/src/backend_ai/
+/src/backend_ai/*
+!/src/backend_ai/gateway/
+/src/backend_ai/gateway/*
+!/src/backend_ai/gateway/understanding/
+/src/backend_ai/gateway/understanding/*
+!/src/backend_ai/gateway/understanding/onnx_inference.py
