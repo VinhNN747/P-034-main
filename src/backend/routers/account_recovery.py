@@ -35,7 +35,7 @@ class RecoveryEmail(AccountEmail):
 
 
 class SignupRequest(AccountEmail):
-    password: str = Field(min_length=8, max_length=128, repr=False)
+    password: str = Field(min_length=12, max_length=128, repr=False)
 
 
 @router.post("/signup/request")
