@@ -54,6 +54,7 @@ class ApplicationKeyService:
         record = ApplicationApiKeyRecord(
             application_id=application_id,
             name=payload.name,
+            description=payload.description,
             key_prefix=raw_key[:12],
             key_hash=hashlib.sha256(raw_key.encode("utf-8")).hexdigest(),
         )
@@ -111,6 +112,7 @@ class ApplicationKeyService:
         return ApplicationKeyRead(
             id=record.id,
             name=record.name,
+            description=record.description,
             key_prefix=record.key_prefix,
             created_at=record.created_at,
             last_used_at=record.last_used_at,
